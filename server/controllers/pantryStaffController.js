@@ -2,8 +2,8 @@ import PantryStaff from "../models/pantryStaffModel.js";
 
 export default {
   registerPantryStaff: async (req, res) => {
-    const { name, email, password, contactInfo, shift } = req.body;
-    if (!name || !email || !password || !contactInfo || !shift) {
+    const { name, email, password, contactInfo } = req.body;
+    if (!name || !email || !password || !contactInfo) {
       return res.status(400).json({
         message: "Please provide all required fields",
       });
@@ -22,7 +22,6 @@ export default {
         email,
         password,
         contactInfo,
-        shift,
       });
 
       const token = pantryStaff.generateAuthToken();
@@ -38,7 +37,13 @@ export default {
       res.status(201).cookie("token", token).json({
         status: "success",
         token,
-        data: pantryStaff,
+        data: {
+          id: pantryStaff._id,
+          name: pantryStaff.name,
+          email: pantryStaff.email,
+          contactInfo: pantryStaff.contactInfo,
+          role: pantryStaff.role
+        },
       });
     } catch (error) {
       res.status(500).json({

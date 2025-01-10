@@ -29,11 +29,6 @@ const pantryStaffSchema = new mongoose.Schema(
       required: [true, "Contact information is required"],
       match: [/^\+?[\d\s-]+$/, "Please enter a valid phone number"],
     },
-    shift: {
-      type: String,
-      enum: ['Morning', 'Afternoon', 'Night'],
-      required: [true, "Shift is required"],
-    },
     role: {
       type: String,
       default: "Pantry Staff",
@@ -60,7 +55,7 @@ pantryStaffSchema.method('comparePassword', async function(enteredPassword) {
 
 pantryStaffSchema.method("generateAuthToken", function () {
   return jwt.sign(
-    { id: this._id, role: this.role, email: this.email },
+    { id: this._id, role: this.role, email: this.email, name: this.name },
     process.env.JWT_SECRET,
     { expiresIn: "24h" }
   );

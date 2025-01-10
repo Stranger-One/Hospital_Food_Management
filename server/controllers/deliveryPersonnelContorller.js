@@ -37,7 +37,13 @@ export default {
       res.status(201).cookie("token", token).json({
         status: "success",
         token,
-        data: deliveryPersonnel,
+        data: {
+          id: deliveryPersonnel._id,
+          name: deliveryPersonnel.name,
+          email: deliveryPersonnel.email,
+          contactInfo: deliveryPersonnel.contactInfo,
+          role: deliveryPersonnel.role
+        },
       });
     } catch (error) {
       res.status(500).json({

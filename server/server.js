@@ -11,7 +11,7 @@ import pantryStaffRouter from './routes/pantryStaffRouter.js'
 import deliveryPersonnelRouter from './routes/deliveryPersonnelRouter.js'
 import mealBoxRouter from './routes/mealBoxRouter.js'
 import dietChartRouter from './routes/dieatChartRouter.js'
-
+import commonRouter from './routes/commonRouter.js'
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -48,5 +48,6 @@ app.use("/api/pantry-staff", pantryStaffRouter)
 app.use("/api/delivery-personnel", deliveryPersonnelRouter)
 app.use("/api/meal-box", mealBoxRouter)
 app.use("/api/diet-chart", dietChartRouter)
+app.use("/api/common", commonRouter)
 
 app.listen(PORT, ()=> console.log(`Server is running on port ${PORT}`))

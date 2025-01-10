@@ -58,7 +58,7 @@ foodManagerSchema.method('comparePassword', async function(enteredPassword) {
 
 foodManagerSchema.method("generateAuthToken", function () {
   return jwt.sign(
-    { id: this._id, role: this.role, email: this.email },
+    { id: this._id, role: this.role, email: this.email, name: this.name },
     process.env.JWT_SECRET,
     { expiresIn: "24h" }
   );
