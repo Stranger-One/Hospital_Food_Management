@@ -40,7 +40,7 @@ const DeliveryPSignup = () => {
 
     try {
       // API call will go here
-      const response = await axios.post(`${import.meta.env.SERVER_BASE_URL}/api/delivery-personnel/register`, data)
+      const response = await axios.post(`${import.meta.env.VITE_SERVER_BASE_URL}/api/delivery-personnel/register`, data)
       // console.log(response.data)
 
       sessionStorage.setItem("token", JSON.stringify(response.data.token))

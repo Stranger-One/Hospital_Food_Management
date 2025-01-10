@@ -4,11 +4,11 @@ const authSlice = createSlice({
     name: "auth",
     initialState: {
         userData: null, 
-        // {
+        // userData: {
         //     id: "ghgfhfh",
         //     name: "adfdfdgh",
         //     email: "ejfafoiw22h",
-        //     role: "Food Manager"
+        //     role: "Pantry Staff"
         // }
     },
     reducers:{

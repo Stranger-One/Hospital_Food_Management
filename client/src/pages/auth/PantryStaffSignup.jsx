@@ -41,7 +41,7 @@ const PantryStaffSignup = () => {
     }
 
     try {
-      const response = await axios.post(`${import.meta.env.SERVER_BASE_URL}/api/pantry-staff/register`, data)
+      const response = await axios.post(`${import.meta.env.VITE_SERVER_BASE_URL}/api/pantry-staff/register`, data)
       // console.log("response", response.data);
 
       sessionStorage.setItem("token", JSON.stringify(response.data.token))

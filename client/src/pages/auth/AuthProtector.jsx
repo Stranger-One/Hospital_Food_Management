@@ -11,61 +11,68 @@ const AuthProtector = ({ children }) => {
   const userData = useSelector(state => state.auth.userData)
   const [loading, setLoading] = useState(true)
 
-  
+  // Verify token and fetch user data on mount
   useEffect(() => {
-    const getAuth = async () => {
+    const verifyAuth = async () => {
+      const token = sessionStorage.getItem('token')
+
+      if (!token) {
+        console.log("token not found")
+        navigate('/auth/login')
+        setLoading(false)
+        return
+      }
+
       try {
-        const response = await axios.get(`${import.meta.env.SERVER_BASE_URL}/api/common/check-auth`, {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${JSON.parse(sessionStorage.getItem('token'))}`
+        const response = await axios.get(
+          `${import.meta.env.VITE_SERVER_BASE_URL}/api/common/verify-token`,
+          {
+            headers: {
+              Authorization: `Bearer ${JSON.parse(token)}`
+            }
           }
-        })
-        if(response.data.success){
-          dispatch(setUserData(response.data.data))
-        } else {
-          dispatch(setUserData(null))
-        }
+        )
+        dispatch(setUserData(response.data.data))
+        console.log("userdata", response.data.data)
       } catch (error) {
-        console.error(error);
+        console.error('Token verification failed:', error)
+        sessionStorage.removeItem('token')
         dispatch(setUserData(null))
+      } finally {
+        setLoading(false)
       }
-      setLoading(false)
-    };
-    
-    getAuth()
-  }, [dispatch])
-  
+    }
 
+    verifyAuth()
+  }, [dispatch])
 
   useEffect(() => {
-    if (!userData && !location.pathname.includes("/auth")) {
-      navigate("/auth/login")
-    } else if (userData && !location.pathname.includes("/auth")) {
-      if (userData.role === "Food Manager" && !location.pathname.includes("/manager")) {
-        navigate("/manager")
-      } else if (userData.role === "Pantry Staff" && !location.pathname.includes("/pantry")) {
-        navigate("/pantry")
-      } else if (userData.role === "Delivery Personnel" && !location.pathname.includes("/delivery")) {
-        navigate("/delivery")
+    if (!userData) {
+      navigate('/auth/login')
+    } else if(userData){
+      if(userData.role === "Food Manager" && !location.pathname.includes("/manager")) {
+        navigate('/manager')
+      } else if(userData.role === "Pantry Staff" && !location.pathname.includes("/pantry")){
+        navigate('/pantry')
+      } else if(userData.role === "Delivery Personnel" && !location.pathname.includes("/delivery")){
+        navigate('/delivery')
       }
-    } else if (userData && location.pathname.includes("/auth")) {
-      navigate("/")
     }
-    
-  }, [userData, navigate, location.pathname]);
+
+    // setLoading(false)
+  }, [userData, location.pathname])
+
+
 
   if (loading) {
     return (
-      <div className="sticky top-0 left-0 w-full h-screen bg-gray-200 flex items-center justify-center">
-        <p className='text-3xl font-semibold'>Loading...</p>
+      <div className="fixed inset-0 bg-gray-100 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
       </div>
     )
   }
 
-  return (
-    <>{children}</>
-  )
+  return children
 }
 
 export default AuthProtector

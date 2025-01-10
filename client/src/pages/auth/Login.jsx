@@ -32,7 +32,7 @@ const Login = () => {
     // console.log("formData", formData)
 
     try {
-      const response = await axios.post(`${import.meta.env.SERVER_BASE_URL}/api/common/login`, formData)
+      const response = await axios.post(`${import.meta.env.VITE_SERVER_BASE_URL}/api/common/login`, formData)
       // console.log("resonse", response);
 
       sessionStorage.setItem("token", JSON.stringify(response.data.token))
